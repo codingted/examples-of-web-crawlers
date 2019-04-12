@@ -9,6 +9,7 @@ from random import choice
 from threading import Thread
 import configparser
 import time
+import datetime
 import sys
 
 
@@ -103,6 +104,7 @@ def start_care():
 
 
         # 节日问候语
+        festival_year = time.strftime('%Y', time.localtime())
         festival_month = time.strftime('%m', time.localtime())
         festival_day = time.strftime('%d', time.localtime())
 
@@ -130,7 +132,19 @@ def start_care():
             print("发送生日祝福:%s" % time.ctime())
 
 
-
+        # 结婚纪念日倒计时
+        if(flag_wedding_count_down and now_time == "00:00"):
+            wedding_date_time = datetime.date(int(festival_year), int(wedding_month), int(wedding_day))
+            now = datetime.date.today()
+            gap_day = (wedding_date_time - now).days
+            if gap_day > 0:
+                send_message("距离我们的结婚纪念日还有:%s天" % gap_day)
+                print("发送结婚纪念日倒计时:%s" % time.ctime())
+            elif gap_day == 0:
+                send_message(str_wedding)
+                print("发送结婚纪念日祝福:%s" % time.ctime())
+            else:
+                print("发送结婚纪念日感慨:%s" % time.ctime())
 
 
 
@@ -189,6 +203,11 @@ if __name__ == "__main__":
     birthday_month = cf.get("configuration", "birthday_month")
     # 几号，注意补全数字，为两位数，比如6号必须写成08
     birthday_day = cf.get("configuration", "birthday_day")
+
+    # 设置结婚纪念日
+    flag_wedding_count_down = cf.get("configuration", "flag_wedding_count_down")
+    wedding_month = cf.get("configuration", "wedding_month")
+    wedding_day = cf.get("configuration", "wedding_day")
 
 
     # 读取早上起床时间，中午吃饭时间，下午吃饭时间，晚上睡觉时间的随机提示语
@@ -259,6 +278,10 @@ if __name__ == "__main__":
     # 她生日的时候的祝福语
     str_birthday = cf.get("configuration", "str_birthday")
     print(str_birthday)
+
+    # 结婚纪念日
+    str_wedding = cf.get("configuration", "str_wedding")
+    print(str_wedding)
 
 
     # 开始守护女友
