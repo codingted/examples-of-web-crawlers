@@ -132,7 +132,6 @@ def start_care():
             send_message(str_birthday)
             print("发送生日祝福:%s" % time.ctime())
 
-
         # 结婚纪念日倒计时
         if(flag_wedding_count_down and now_time == "00:00"):
             wedding_date_time = datetime.date(int(festival_year), int(wedding_month), int(wedding_day))
@@ -142,10 +141,16 @@ def start_care():
                 send_message("距离我们的结婚纪念日还有:%s天" % gap_day)
                 print("发送结婚纪念日倒计时:%s" % time.ctime())
             elif gap_day == 0:
+                # 情诗之前
+                send_message(str_before_love_poem)
                 # 读取情诗
                 f = open('./love_poem.txt')
                 lines = f.read()
                 send_message(lines)
+                # 情诗之后
+                send_message(str_after_love_poem)
+                # 亲亲表情
+                send_message('😗 😙 😚 🥳')
                 # 结婚纪念
                 send_message(str_wedding)
                 print("发送结婚纪念日祝福:%s" % time.ctime())
@@ -286,6 +291,14 @@ if __name__ == "__main__":
     str_birthday = cf.get("configuration", "str_birthday")
     print(str_birthday)
 
+    # 情诗前
+    str_before_love_poem = cf.get("configuration", "str_before_love_poem")
+    print(str_before_love_poem)
+
+    # 情诗后
+    str_after_love_poem = cf.get("configuration", "str_after_love_poem")
+    print(str_after_love_poem)
+        
     # 结婚纪念日
     str_wedding = cf.get("configuration", "str_wedding")
     print(str_wedding)
