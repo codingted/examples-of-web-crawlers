@@ -11,6 +11,7 @@ import configparser
 import time
 import datetime
 import sys
+import os
 
 
 # 获取每日励志精句
@@ -141,6 +142,11 @@ def start_care():
                 send_message("距离我们的结婚纪念日还有:%s天" % gap_day)
                 print("发送结婚纪念日倒计时:%s" % time.ctime())
             elif gap_day == 0:
+                # 读取情诗
+                f = open('./love_poem.txt')
+                lines = f.read()
+                send_message(lines)
+                # 结婚纪念
                 send_message(str_wedding)
                 print("发送结婚纪念日祝福:%s" % time.ctime())
             else:
@@ -157,6 +163,8 @@ def start_care():
 
 if __name__ == "__main__":
 
+    # 设置时区
+    os.environ['TZ'] = 'Asia/Shanghai'
     # 若发现读取取配置文件出错，可以取消注释下面这行，一般在pycharm环境下才需要增加
     # 设置当前文件所在的目录为当前工作路径
     # chdir(sys.path[0])
@@ -216,7 +224,6 @@ if __name__ == "__main__":
     str_list_good_morning = ''
     with open("./remind_sentence/sentence_good_morning.txt", "r",encoding='UTF-8') as f:
         str_list_good_morning = f.readlines()
-    print(str_list_good_morning)
 
     #中午吃饭问候语列表，数据来源于新浪微博
     str_list_good_lunch = ''
@@ -283,7 +290,7 @@ if __name__ == "__main__":
     str_wedding = cf.get("configuration", "str_wedding")
     print(str_wedding)
 
-
+    print(str_list_good_morning)
     # 开始守护女友
     t = Thread(target=start_care, name='start_care')
     t.start()
